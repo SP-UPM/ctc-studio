@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>UPM CTC Studio V1</title>
+<style>
+:root {
+  --green:#164E3A; --green2:#2E6B56; --gold:#C79A3B; --cream:#FBF8F1;
+  --pale:#EAF2EE; --blue:#35668A; --pblue:#EAF1F7; --red:#9C3A35;
+  --pred:#F8E8E6; --yellow:#FFF5D9; --ink:#202526; --muted:#66716f; --line:#D9E0DC;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,Arial,sans-serif;background:#f6f7f5;color:var(--ink)}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+.app{min-height:100vh;display:grid;grid-template-columns:285px 1fr}
+.sidebar{background:var(--green);color:white;padding:24px 18px;position:sticky;top:0;height:100vh;overflow:auto}
+.brand{display:flex;gap:10px;align-items:center;margin-bottom:24px}
+.brand-badge{width:42px;height:42px;border-radius:12px;background:var(--gold);display:grid;place-items:center;font-weight:900;color:white}
+.brand h1{font-size:20px;margin:0} .brand small{display:block;color:#d7e7df;margin-top:3px}
+.ef-bar{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;margin:16px 0 22px}
+.ef{padding:8px 4px;border-radius:8px;text-align:center;font-size:11px;font-weight:800}
+.ef.e{background:#2b7a5b} .ef.f{background:#3d6f93} .ef.o{background:#b58b36} .ef.j{background:#8f3f3b}
+.navbtn{width:100%;text-align:left;background:transparent;border:0;color:#e6f0eb;padding:11px 12px;border-radius:10px;margin:2px 0;display:flex;gap:10px;align-items:flex-start}
+.navbtn span.num{background:rgba(255,255,255,.12);width:26px;height:26px;display:grid;place-items:center;border-radius:7px;font-weight:800;flex:0 0 26px}
+.navbtn.active{background:white;color:var(--green);font-weight:800}
+.navbtn:hover{background:rgba(255,255,255,.12)} .navbtn.active:hover{background:white}
+.side-actions{margin-top:20px;padding-top:18px;border-top:1px solid rgba(255,255,255,.18)}
+.side-actions button{width:100%;border:1px solid rgba(255,255,255,.3);background:transparent;color:white;padding:9px 10px;border-radius:9px;margin:4px 0}
+.main{padding:28px 34px 60px;max-width:1400px;width:100%}
+.topbar{display:flex;justify-content:space-between;gap:18px;align-items:flex-start;margin-bottom:22px}
+.topbar h2{margin:0;color:var(--green);font-size:29px} .topbar p{color:var(--muted);margin:6px 0 0}
+.progress-wrap{min-width:240px} .progress{height:9px;border-radius:10px;background:#e4e8e5;overflow:hidden} .progress>div{height:100%;background:linear-gradient(90deg,var(--green2),var(--gold));width:12.5%;transition:.25s}
+.card{background:white;border:1px solid var(--line);border-radius:16px;padding:20px;margin:0 0 16px;box-shadow:0 4px 16px rgba(18,52,39,.04)}
+.card h3{margin:0 0 12px;color:var(--green)} .card h4{margin:15px 0 8px;color:var(--green2)}
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+label{font-weight:700;font-size:13px;color:#34423e;display:block;margin-bottom:6px}
+input[type=text],textarea,select{width:100%;border:1px solid #ccd6d1;border-radius:10px;padding:10px 11px;background:white;color:var(--ink)}
+textarea{min-height:104px;resize:vertical}
+.help{font-size:12px;color:var(--muted);margin-top:5px}
+.stage{display:none} .stage.active{display:block}
+.choice-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.choice{border:1px solid var(--line);background:white;border-radius:12px;padding:13px;text-align:left}
+.choice:hover{border-color:var(--gold)} .choice.selected{border:2px solid var(--green2);background:var(--pale)}
+.choice .title{font-weight:800;color:var(--green)} .choice .sub{font-size:12px;color:var(--muted);margin-top:5px}
+.sdg-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px;max-height:470px;overflow:auto;padding-right:3px}
+.sdg{border:1px solid var(--line);border-radius:11px;padding:10px;background:white}
+.sdg.selected{border:2px solid var(--gold);background:var(--yellow)} .sdg b{color:var(--green)} .sdg small{display:block;color:var(--muted);margin-top:3px}
+.pill{display:inline-block;padding:5px 9px;border-radius:999px;background:var(--pale);color:var(--green);font-weight:700;font-size:12px;margin:3px}
+.btnrow{display:flex;justify-content:space-between;gap:10px;margin-top:20px}
+.btn{border:0;border-radius:10px;padding:10px 14px;font-weight:800}
+.btn.primary{background:var(--green);color:white} .btn.secondary{background:#eef2ef;color:var(--green)} .btn.gold{background:var(--gold);color:white}
+.notice{border-left:5px solid var(--gold);background:var(--yellow);padding:12px 14px;border-radius:10px;margin:12px 0}
+.notice.green{border-color:var(--green);background:var(--pale)} .notice.red{border-color:var(--red);background:var(--pred)}
+.scoregrid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.score{padding:13px;border-radius:12px;background:#f2f4f3} .score strong{display:block;font-size:13px} .score .status{font-size:22px;margin-top:5px}
+.rubric{width:100%;border-collapse:collapse;font-size:12px} .rubric th,.rubric td{border:1px solid #d7dfdb;padding:8px;vertical-align:top}
+.rubric th{background:var(--green);color:white} .rubric td:first-child{font-weight:800;background:var(--pale)}
+.checklist label{font-weight:500;display:flex;gap:8px;margin:7px 0;align-items:flex-start}
+.outputbox{background:#f8faf8;border:1px dashed #bac8c1;padding:12px;border-radius:10px;white-space:pre-wrap}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px} .tab{border:1px solid var(--line);background:white;padding:8px 10px;border-radius:9px;font-weight:700}
+.tab.active{background:var(--green);color:white}
+.library-item{border:1px solid var(--line);border-radius:12px;padding:13px;margin-bottom:10px;background:white}
+.library-item h4{margin:0 0 6px;color:var(--green)} .library-item p{font-size:13px;margin:4px 0;color:#3f4b47}
+.mini{font-size:12px;color:var(--muted)}
+hr{border:0;border-top:1px solid var(--line);margin:18px 0}
+@media(max-width:1000px){.app{grid-template-columns:1fr}.sidebar{position:relative;height:auto}.navlist{display:grid;grid-template-columns:repeat(2,1fr)}.main{padding:20px}.sdg-grid{grid-template-columns:repeat(2,1fr)}.choice-grid,.grid3{grid-template-columns:1fr 1fr}}
+@media(max-width:650px){.grid2,.grid3,.choice-grid,.sdg-grid,.scoregrid{grid-template-columns:1fr}.topbar{flex-direction:column}}
+@media print{.sidebar,.topbar .progress-wrap,.btnrow,.tabs,.btn,.no-print{display:none!important}.app{display:block}.main{padding:0;max-width:none}.stage{display:none!important}#stage8{display:block!important}body{background:white}.card{box-shadow:none;break-inside:avoid}}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-badge">CTC</div>
+      <div><h1>CTC Studio</h1><small>Design • Practise • Assess • Evidence</small></div>
+    </div>
+    <div class="ef-bar">
+      <div class="ef e">E<br>Evidence</div><div class="ef f">F<br>Framing</div><div class="ef o">O<br>Own</div><div class="ef j">J<br>Judgement</div>
+    </div>
+    <div class="navlist" id="navlist"></div>
+    <div class="side-actions">
+      <button onclick="showTool('clinic')">Assessment Clinic</button>
+      <button onclick="showTool('sim')">Simulation Lab</button>
+      <button onclick="showTool('library')">11-Cluster Library</button>
+      <button onclick="saveState()">Save locally</button>
+      <button onclick="resetStudio()">Reset Studio</button>
+    </div>
+  </aside>
+  <main class="main">
+    <div class="topbar">
+      <div><h2 id="stageTitle">Stage 01 — Course Setup</h2><p id="stageSub">Start with a course you already teach.</p></div>
+      <div class="progress-wrap"><div class="mini">Studio progress</div><div class="progress"><div id="progressFill"></div></div><div class="mini" id="progressText">1 of 8</div></div>
+    </div>
+
+    <section class="stage active" id="stage1">
+      <div class="card">
+        <h3>Course Setup</h3>
+        <div class="grid2">
+          <div><label>Course name</label><input id="course" type="text" placeholder="e.g., Semiconductor Technology"></div>
+          <div><label>Course code</label><input id="code" type="text" placeholder="e.g., PHY4210"></div>
+          <div><label>Student level</label><input id="level" type="text" placeholder="e.g., Year 3 undergraduate"></div>
+          <div><label>Existing topic</label><input id="topic" type="text" placeholder="A topic already in the syllabus"></div>
+        </div>
+        <div style="margin-top:14px"><label>Existing CLO / learning outcome</label><textarea id="existingClo" placeholder="Paste the current CLO if available."></textarea></div>
+        <div style="margin-top:14px"><label>Existing assessment</label><textarea id="existingAssessment" placeholder="Paste an existing assignment, task or question."></textarea></div>
+        <div class="notice green"><b>Design rule:</b> Do not create a new sustainability subject. Start from disciplinary content you already teach.</div>
+      </div>
+      <div class="btnrow"><span></span><button class="btn primary" onclick="goStage(2)">Next: Cluster & SDG →</button></div>
+    </section>
+
+    <section class="stage" id="stage2">
+      <div class="card">
+        <h3>Cluster, SDG & Sustainability Context</h3>
+        <h4>Choose one discipline cluster</h4>
+        <div id="clusterChoices" class="choice-grid"></div>
+      </div>
+      <div class="card">
+        <h4>Choose one Primary SDG</h4>
+        <p class="mini">All 17 SDGs are available. Secondary SDGs may be noted later, but keep one primary SDG for clean alignment.</p>
+        <div id="sdgChoices" class="sdg-grid"></div>
+      </div>
+      <div class="card">
+        <div class="grid2">
+          <div><label>Authentic sustainability issue</label><textarea id="issue" placeholder="What real tension, uncertainty, contested claim or incomplete evidence exists in this topic?"></textarea></div>
+          <div><label>Claim / question to interrogate</label><textarea id="claim" placeholder="Write the claim students will need to test, qualify, challenge or defend."></textarea></div>
+        </div>
+        <div style="margin-top:12px"><label>Secondary SDG(s) — optional</label><input id="secondarySdgs" type="text" placeholder="e.g., SDG 12, SDG 13"></div>
+      </div>
+      <div class="btnrow"><button class="btn secondary" onclick="goStage(1)">← Back</button><button class="btn primary" onclick="goStage(3)">Next: CTC Outcome →</button></div>
+    </section>
+
+    <section class="stage" id="stage3">
+      <div class="card">
+        <h3>CTC Learning Outcome Builder</h3>
+        <p>Your outcome should make the reasoning observable. Useful verbs: <span class="pill">evaluate</span><span class="pill">interrogate</span><span class="pill">audit</span><span class="pill">critique</span><span class="pill">appraise</span><span class="pill">defend</span></p>
+        <label>Proposed CTC learning outcome</label>
+        <textarea id="ctcClo"></textarea>
+        <button class="btn gold no-print" style="margin-top:8px" onclick="suggestClo()">Generate from my context</button>
+        <div class="notice"><b>Test:</b> Could you write four different rubric levels for the verb in this outcome? If not, it may still be too vague.</div>
+      </div>
+      <div class="card">
+        <h4>E-F-O-J coverage in the outcome</h4>
+        <div id="cloScores" class="scoregrid"></div>
+      </div>
+      <div class="btnrow"><button class="btn secondary" onclick="goStage(2)">← Back</button><button class="btn primary" onclick="goStage(4)">Next: Learning Activities →</button></div>
+    </section>
+
+    <section class="stage" id="stage4">
+      <div class="card">
+        <h3>Learning Activity Designer</h3>
+        <div class="notice green"><b>Required sequence:</b> Practice 1 → Feedback → Practice 2 → Feedback → Summative Assessment</div>
+        <div class="grid2">
+          <div>
+            <h4>Practice 1 — Evidence Challenge</h4>
+            <label>Learning activity</label><textarea id="activity1"></textarea>
+            <label>Student output</label><input id="activity1Output" type="text" placeholder="e.g., one-page Evidence Appraisal Sheet">
+            <label>Feedback method</label><input id="feedback1" type="text" placeholder="Peer / lecturer / structured checklist">
+          </div>
+          <div>
+            <h4>Practice 2 — Reframe & Challenge</h4>
+            <label>Learning activity</label><textarea id="activity2"></textarea>
+            <label>Student output</label><input id="activity2Output" type="text" placeholder="e.g., revised judgement memo / 3-minute defence">
+            <label>Feedback method</label><input id="feedback2" type="text" placeholder="Peer challenge / lecturer feedback">
+          </div>
+        </div>
+        <button class="btn gold no-print" onclick="suggestActivities()">Use cluster example</button>
+      </div>
+      <div class="btnrow"><button class="btn secondary" onclick="goStage(3)">← Back</button><button class="btn primary" onclick="goStage(5)">Next: Assessment →</button></div>
+    </section>
+
+    <section class="stage" id="stage5">
+      <div class="card">
+        <h3>Assessment Designer</h3>
+        <div class="grid2">
+          <div>
+            <label>Assessment method</label><select id="assessmentMethod"></select>
+            <div class="help">How the competency is assessed.</div>
+          </div>
+          <div>
+            <label>Assessment output</label><input id="assessmentOutput" type="text" placeholder="What exactly will the student submit or perform?">
+            <div class="help">The actual evidence you will mark.</div>
+          </div>
+        </div>
+        <div style="margin-top:14px"><label>Student task brief</label><textarea id="taskBrief" style="min-height:180px"></textarea></div>
+        <button class="btn gold no-print" onclick="suggestAssessment()">Generate discipline-appropriate example</button>
+      </div>
+      <div class="card">
+        <h4>CTC Diagnostic</h4>
+        <div id="assessmentScores" class="scoregrid"></div>
+        <div id="oneRule"></div>
+      </div>
+      <div class="btnrow"><button class="btn secondary" onclick="goStage(4)">← Back</button><button class="btn primary" onclick="goStage(6)">Next: Rubric →</button></div>
+    </section>
+
+    <section class="stage" id="stage6">
+      <div class="card">
+        <h3>E-F-O-J Rubric Builder</h3>
+        <p class="mini">Keep the construct. Adapt the vocabulary to the discipline.</p>
+        <div id="rubricWrap"></div>
+        <button class="btn gold no-print" onclick="adaptRubric()">Adapt wording to selected cluster</button>
+      </div>
+      <div class="btnrow"><button class="btn secondary" onclick="goStage(5)">← Back</button><button class="btn primary" onclick="goStage(7)">Next: Alignment Check →</button></div>
+    </section>
+
+    <section class="stage" id="stage7">
+      <div class="card">
+        <h3>Alignment & CTC Quality Gate</h3>
+        <div id="alignmentSummary"></div>
+      </div>
+      <div class="card">
+        <h4>Quality Gate</h4>
+        <div id="qualityChecklist" class="checklist"></div>
+        <div id="qualityResult"></div>
+      </div>
+      <div class="btnrow"><button class="btn secondary" onclick="goStage(6)">← Back</button><button class="btn primary" onclick="goStage(8)">Complete & Export →</button></div>
+    </section>
+
+    <section class="stage" id="stage8">
+      <div class="card">
+        <h3>CTC Course Integration Pack</h3>
+        <div id="finalPack"></div>
+      </div>
+      <div class="btnrow no-print"><button class="btn secondary" onclick="goStage(7)">← Back</button><div><button class="btn gold" onclick="exportJSON()">Export JSON</button> <button class="btn primary" onclick="window.print()">Print / Save PDF</button></div></div>
+    </section>
+
+    <section class="stage" id="tool-clinic">
+      <div class="card">
+        <h3>Assessment Clinic</h3>
+        <p>Paste an existing assignment. The clinic checks whether CTC is visible in the task.</p>
+        <textarea id="clinicText" style="min-height:180px" placeholder="Paste assignment here..."></textarea>
+        <button class="btn primary" onclick="runClinic()">Diagnose CTC</button>
+        <div id="clinicResult" style="margin-top:14px"></div>
+      </div>
+      <div class="btnrow"><button class="btn secondary" onclick="goStage(currentStage)">← Return to Studio</button></div>
+    </section>
+
+    <section class="stage" id="tool-sim">
+      <div class="card">
+        <h3>CTC Simulation Lab</h3>
+        <label>Select a cluster</label><select id="simCluster"></select>
+        <div id="simContent" style="margin-top:14px"></div>
+      </div>
+      <div class="btnrow"><button class="btn secondary" onclick="goStage(currentStage)">← Return to Studio</button></div>
+    </section>
+
+    <section class="stage" id="tool-library">
+      <div class="card">
+        <h3>11-Cluster Example Library</h3>
+        <div class="tabs" id="libraryTabs"></div>
+        <div id="libraryContent"></div>
+      </div>
+      <div class="btnrow"><button class="btn secondary" onclick="goStage(currentStage)">← Return to Studio</button></div>
+    </section>
+  </main>
+</div>
+
+<script>
+const clusters = [{"name": "Health, Medical and Life Sciences", "focus": "Study design, sampling, outcomes, applicability, public-health evidence", "sample_issue": "Should a university adopt a new dengue-prevention intervention based on two conflicting studies?", "pedagogy": "Case-Based Learning; Guided Inquiry; Socratic Questioning", "activity1": "Compare two studies and identify differences in study design, sample, outcome measure, funding and limitations.", "activity2": "Reassess the preferred intervention after a peer challenge on transferability to the local population.", "assessment_method": "Case Analysis / Evidence Appraisal", "assessment_output": "Evidence-based clinical/public-health recommendation memo", "simulation": "Two fictional studies report different effects of a dengue-control intervention. Students must judge whether the evidence warrants local adoption."}, {"name": "Sciences", "focus": "Method, measurement, uncertainty, controls, inference", "sample_issue": "Does a new material genuinely have a lower environmental impact than the conventional material?", "pedagogy": "Guided Inquiry; Inquiry-Based Learning; Laboratory-Based Learning", "activity1": "Annotate an experimental paper for claim, method, controls, measurement uncertainty and limitations.", "activity2": "Compare two plausible interpretations of the same dataset and revise the conclusion after critique.", "assessment_method": "Research Paper Critique / Laboratory Critique", "assessment_output": "Scientific evidence appraisal or laboratory interpretation report", "simulation": "Students inspect fictional experimental data claiming a green material is superior and identify what the evidence can and cannot establish."}, {"name": "Engineering", "focus": "System boundary, lifecycle evidence, assumptions, constraints", "sample_issue": "Should Technology X be described as low-carbon compared with the conventional option?", "pedagogy": "Problem-Based Learning; Case-Based Learning; Design Critique", "activity1": "Compare manufacturer claims, specifications and an independent lifecycle summary.", "activity2": "Present a preliminary engineering recommendation, receive a boundary/assumption challenge, then revise.", "assessment_method": "Technical Brief / Oral Design Defence", "assessment_output": "Technical evidence brief or design defence", "simulation": "A fictional manufacturer claims 40% lower emissions, but its lifecycle boundary excludes maintenance and end-of-life."}, {"name": "Computer Science and Information Technology", "focus": "Dataset, benchmark, metric, test conditions, excluded users", "sample_issue": "Is Model A really more accurate and more sustainable than Model B?", "pedagogy": "Guided Inquiry; Problem-Based Learning; AI Verification", "activity1": "Audit a benchmark: dataset, metric, test conditions, energy measurement and excluded cases.", "activity2": "Verify an AI-generated explanation against independent evidence and identify unsupported inferences.", "assessment_method": "Benchmark Audit / AI Verification Task / Structured Viva", "assessment_output": "AI or benchmark verification memo", "simulation": "A fictional AI vendor claims better performance and lower energy use based on a narrow benchmark."}, {"name": "Mathematics and Statistics", "focus": "Assumptions, denominator, model sensitivity, sampling, uncertainty", "sample_issue": "Does the headline 'Inequality decreased by 20%' follow from the data?", "pedagogy": "Inquiry-Based Learning; Scenario Analysis; Problem-Based Learning", "activity1": "Interpret the same dataset using two denominators/visualisations and identify how framing changes the message.", "activity2": "Change one model assumption at a time and identify which assumption most affects the recommendation.", "assessment_method": "Data Interpretation / Model Critique / Vignette Response", "assessment_output": "Statistical interpretation memo", "simulation": "Students receive fictional inequality data that support different conclusions depending on denominator and baseline."}, {"name": "Education", "focus": "Learning measures, research design, transferability, competing pedagogies", "sample_issue": "Does available evidence justify adopting generative AI as a learning support across a faculty?", "pedagogy": "Case-Based Learning; Structured Academic Controversy; Socratic Seminar", "activity1": "Compare two studies supporting different teaching approaches and inspect how learning was measured.", "activity2": "Argue one position, swap sides, then write what changed in the student's own judgement.", "assessment_method": "Evidence-Based Recommendation / Position Paper", "assessment_output": "Evidence-based teaching recommendation or post-controversy position paper", "simulation": "Two fictional studies report different learning gains from AI-assisted teaching; methods and contexts differ substantially."}, {"name": "Economics, Accounting, Business, Finance and Management", "focus": "ESG evidence, methodology, materiality, projections, greenwashing", "sample_issue": "Is a company's 'net-zero' claim sufficiently supported for an investment decision?", "pedagogy": "Case-Based Learning; Problem-Based Learning; Devil's Advocate", "activity1": "Compare the company's sustainability report with external evidence and reporting methodology.", "activity2": "Challenge an initial investment recommendation using a devil's-advocate review of assumptions and omitted impacts.", "assessment_method": "Decision Memo / ESG Evidence Appraisal / Oral Defence", "assessment_output": "Investment, management or ESG decision memo", "simulation": "A fictional company claims net-zero progress while omitting Scope 3 emissions and using optimistic offsets."}, {"name": "Languages and Communication", "focus": "Framing, attribution, source selection, omitted voices, alternative readings", "sample_issue": "How does media language frame who is responsible for a sustainability crisis?", "pedagogy": "Critical Discourse Analysis; Structured Academic Controversy; Socratic Seminar", "activity1": "Compare three reports of the same event for verbs, sources, attribution and omitted voices.", "activity2": "Rewrite the issue from an alternative framing and critique the weakness in the original interpretation.", "assessment_method": "Media Framing Analysis / Critical Commentary / Oral Defence", "assessment_output": "Critical discourse or media-framing analysis", "simulation": "Three fictional news reports describe the same river pollution event using different sources and responsibility frames."}, {"name": "Sociology, Psychology and Human Development", "focus": "Instrument, construct, sampling, bias, alternative explanation", "sample_issue": "Does a survey support the claim that university students' well-being is declining?", "pedagogy": "Case-Based Learning; Guided Inquiry; Critical Incident Analysis", "activity1": "Inspect survey items, construct definitions and sampling strategy; identify what the instrument misses.", "activity2": "Compare competing explanations and revisit the initial interpretation after new evidence.", "assessment_method": "Survey Critique / Case Analysis / Revision Account", "assessment_output": "Critical research interpretation report", "simulation": "A fictional well-being survey shows decline, but uses a convenience sample and changes one item between years."}, {"name": "Architecture and Design", "focus": "Certification boundary, occupant assumptions, lifecycle stage, context", "sample_issue": "How strongly does a green-building certification support the claim that a building is sustainable?", "pedagogy": "Studio-Based Learning; Design Critique; Case-Based Learning", "activity1": "Compare certification points with operational energy and occupant data.", "activity2": "Present an initial design, receive critique from client/occupant/environment perspectives, then revise the rationale.", "assessment_method": "Certification Critique / Studio Critique / Design Defence", "assessment_output": "Revised design plus critical rationale or design defence", "simulation": "A fictional building scores highly on certification but performs poorly in cooling energy under real occupancy."}, {"name": "Agriculture, Forestry, Environmental Science and Food Science", "focus": "Field conditions, sampling, timeframe, indicators, local knowledge", "sample_issue": "Does Practice A increase yield sustainably without hidden environmental costs?", "pedagogy": "Field-Based Learning; Inquiry-Based Learning; Case-Based Learning", "activity1": "Compare field data, a scientific study, an industry claim and farmer observations.", "activity2": "Reconcile disagreements between sources and revise the recommendation after identifying sampling/timeframe limitations.", "assessment_method": "Field/Laboratory Critique / Comparative Case Analysis / Policy Brief", "assessment_output": "Evidence-based field, land-use or food-system recommendation", "simulation": "Fictional field data show short-term yield gains but limited soil and water indicators."}];
+const sdgs = [{"n": "1", "name": "No Poverty", "issues": "poverty measurement, social protection, inequality, vulnerability, fair access to resources"}, {"n": "2", "name": "Zero Hunger", "issues": "food security, malnutrition, food systems, sustainable agriculture, food waste"}, {"n": "3", "name": "Good Health and Well-being", "issues": "public health, prevention, healthcare access, mental health, environmental health"}, {"n": "4", "name": "Quality Education", "issues": "access, learning quality, inclusion, digital learning, ESD, lifelong learning"}, {"n": "5", "name": "Gender Equality", "issues": "gender roles, access, discrimination, participation, representation"}, {"n": "6", "name": "Clean Water and Sanitation", "issues": "water quality, scarcity, sanitation, wastewater, water governance"}, {"n": "7", "name": "Affordable and Clean Energy", "issues": "renewables, energy efficiency, affordability, energy security, lifecycle impacts"}, {"n": "8", "name": "Decent Work and Economic Growth", "issues": "labour rights, green jobs, economic models, productivity, fair wages"}, {"n": "9", "name": "Industry, Innovation and Infrastructure", "issues": "industrial sustainability, innovation, infrastructure, digital systems, manufacturing"}, {"n": "10", "name": "Reduced Inequalities", "issues": "distribution, access, representation, fiscal policy, migration, inclusion"}, {"n": "11", "name": "Sustainable Cities and Communities", "issues": "housing, transport, resilience, urban planning, green spaces, accessibility"}, {"n": "12", "name": "Responsible Consumption and Production", "issues": "lifecycle impacts, waste, circular economy, sustainable procurement, green claims"}, {"n": "13", "name": "Climate Action", "issues": "mitigation, adaptation, risk, emissions evidence, climate communication"}, {"n": "14", "name": "Life Below Water", "issues": "marine pollution, fisheries, coastal ecosystems, ocean governance"}, {"n": "15", "name": "Life on Land", "issues": "biodiversity, forestry, land degradation, ecosystems, conservation"}, {"n": "16", "name": "Peace, Justice and Strong Institutions", "issues": "governance, justice, misinformation, accountability, trust, institutions"}, {"n": "17", "name": "Partnerships for the Goals", "issues": "cross-sector partnerships, evidence sharing, financing, capacity building, collaboration"}];
+const assessmentMethods = ["Case Analysis / Evidence Appraisal", "Technical Brief", "Policy Brief", "Research Paper Critique", "Laboratory / Field Critique", "Oral Defence / Viva", "Design Defence", "Revision Log", "Vignette / Scenario Response", "Structured Academic Controversy", "AI Verification Task", "Data / Model Interpretation", "Media Framing Analysis", "ESG Evidence Appraisal"];
+const stageMeta = [
+  ["Course Setup","Start with a course you already teach."],
+  ["Cluster, SDG & Context","Choose one cluster, one primary SDG and an authentic issue."],
+  ["CTC Learning Outcome","Make the critical reasoning observable."],
+  ["Learning Activities","Design Practice 1 → Feedback → Practice 2 → Feedback."],
+  ["Assessment Designer","Choose an authentic method and a visible student output."],
+  ["E-F-O-J Rubric Builder","Keep the construct and adapt the language."],
+  ["Alignment & Quality Gate","Check the complete evidence chain."],
+  ["Complete & Export","Compile your CTC Course Integration Pack."]
+];
+let currentStage = 1;
+let selectedCluster = 0;
+let selectedSDG = 8; // SDG 9 default index
+let libraryCluster = 0;
+
+const rubricBase = [
+  ["Evidence","Repeats claims as given.","Questions a claim but not its method.","Evaluates source, method and limits of evidence.","Evaluates source, method and limits and states what the evidence cannot establish."],
+  ["Framing & Assumptions","Accepts the question or claim as framed.","Recognises framing or assumptions but does not probe consequences.","Identifies an assumption embedded in the framing.","Identifies the assumption and explains what the framing makes invisible."],
+  ["Own Position","Asserts a position or rejects competing positions.","States a position with general caveats.","States the weakest point of their own position.","States the weakest point and responds through revision, qualification or reasoned defence."],
+  ["Warranted Judgement","Reaches a conclusion the evidence does not support.","Reaches a conclusion but ignores important limits.","Reaches a conclusion proportionate to the evidence.","Reaches a proportionate conclusion and states the confidence the evidence warrants."]
+];
+
+function el(id){return document.getElementById(id)}
+function esc(s){return (s||"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+
+function buildNav(){
+  const n=el("navlist"); n.innerHTML="";
+  stageMeta.forEach((m,i)=>{
+    const b=document.createElement("button"); b.className="navbtn"+(i===0?" active":""); b.dataset.stage=i+1;
+    b.innerHTML=`<span class="num">${String(i+1).padStart(2,"0")}</span><span><b>${m[0]}</b><br><small>${m[1]}</small></span>`;
+    b.onclick=()=>goStage(i+1); n.appendChild(b);
+  });
+}
+function renderClusters(){
+  el("clusterChoices").innerHTML = clusters.map((c,i)=>`<button class="choice ${i===selectedCluster?"selected":""}" onclick="selectCluster(${i})"><div class="title">${i+1}. ${esc(c.name)}</div><div class="sub">${esc(c.focus)}</div></button>`).join("");
+}
+function renderSDGs(){
+  el("sdgChoices").innerHTML = sdgs.map((s,i)=>`<button class="sdg ${i===selectedSDG?"selected":""}" onclick="selectSDG(${i})"><b>SDG ${s.n}</b> — ${esc(s.name)}<small>${esc(s.issues)}</small></button>`).join("");
+}
+function selectCluster(i){
+  selectedCluster=i; renderClusters();
+  const c=clusters[i];
+  if(!el("issue").value) el("issue").value=c.sample_issue;
+  if(!el("claim").value) el("claim").value=c.sample_issue;
+  saveState();
+}
+function selectSDG(i){selectedSDG=i; renderSDGs(); saveState();}
+function buildMethodSelect(){
+  el("assessmentMethod").innerHTML=assessmentMethods.map(m=>`<option>${esc(m)}</option>`).join("");
+}
+function buildSimSelect(){
+  el("simCluster").innerHTML=clusters.map((c,i)=>`<option value="${i}">${i+1}. ${esc(c.name)}</option>`).join("");
+  el("simCluster").onchange=()=>renderSimulation(+el("simCluster").value);
+}
+function buildLibraryTabs(){
+  el("libraryTabs").innerHTML=clusters.map((c,i)=>`<button class="tab ${i===0?"active":""}" onclick="showLibrary(${i})">${i+1}</button>`).join("");
+  showLibrary(0);
+}
+function showLibrary(i){
+  libraryCluster=i;
+  [...el("libraryTabs").children].forEach((b,j)=>b.classList.toggle("active",j===i));
+  const c=clusters[i];
+  el("libraryContent").innerHTML=`<div class="library-item"><h4>${i+1}. ${esc(c.name)}</h4>
+    <p><b>Discipline lens:</b> ${esc(c.focus)}</p>
+    <p><b>Sample issue:</b> ${esc(c.sample_issue)}</p>
+    <p><b>Pedagogy:</b> ${esc(c.pedagogy)}</p>
+    <p><b>Practice 1:</b> ${esc(c.activity1)}</p>
+    <p><b>Practice 2:</b> ${esc(c.activity2)}</p>
+    <p><b>Assessment:</b> ${esc(c.assessment_method)}</p>
+    <p><b>Output:</b> ${esc(c.assessment_output)}</p>
+    <button class="btn gold" onclick="selectedCluster=${i};renderClusters();suggestActivities();suggestAssessment();goStage(4)">Adapt this example to my course</button>
+  </div>`;
+}
+function renderSimulation(i){
+  const c=clusters[i];
+  el("simContent").innerHTML=`<div class="notice green"><b>Simulation:</b> ${esc(c.simulation)}</div>
+  <div class="grid2">
+    <div class="card"><h4>Practice 1 — Evidence Challenge</h4><p>${esc(c.activity1)}</p><p class="mini">Ask: What is claimed? How was evidence produced? What are the important limits? What can the evidence not show?</p></div>
+    <div class="card"><h4>Practice 2 — Reframe & Challenge</h4><p>${esc(c.activity2)}</p><p class="mini">Ask: What assumption shapes the framing? What is the weakest point in your own conclusion? Should you revise or qualify it?</p></div>
+  </div>
+  <div class="card"><h4>Summative assessment</h4><p><b>Method:</b> ${esc(c.assessment_method)}</p><p><b>Output:</b> ${esc(c.assessment_output)}</p></div>`;
+}
+
+function goStage(n){
+  if(n<1||n>8)return;
+  currentStage=n;
+  document.querySelectorAll(".stage").forEach(s=>s.classList.remove("active"));
+  el("stage"+n).classList.add("active");
+  document.querySelectorAll(".navbtn").forEach(b=>b.classList.toggle("active",+b.dataset.stage===n));
+  el("stageTitle").textContent=`Stage ${String(n).padStart(2,"0")} — ${stageMeta[n-1][0]}`;
+  el("stageSub").textContent=stageMeta[n-1][1];
+  el("progressFill").style.width=(n/8*100)+"%"; el("progressText").textContent=`${n} of 8`;
+  if(n===3) updateCloScores();
+  if(n===5) updateAssessmentScores();
+  if(n===6) renderRubric();
+  if(n===7) renderAlignment();
+  if(n===8) renderFinalPack();
+  saveState();
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+function showTool(tool){
+  document.querySelectorAll(".stage").forEach(s=>s.classList.remove("active"));
+  el("tool-"+tool).classList.add("active");
+  document.querySelectorAll(".navbtn").forEach(b=>b.classList.remove("active"));
+  if(tool==="sim") renderSimulation(+el("simCluster").value);
+}
+
+function efScore(text){
+  const t=(text||"").toLowerCase();
+  return {
+    E: /(evidence|source|method|data|sample|measurement|limit|uncertainty|benchmark|study)/.test(t),
+    F: /(assumption|framing|frame|boundary|excluded|omitted|invisible|context|transfer)/.test(t),
+    O: /(weakest|own position|own conclusion|counter|challenge|revise|qualif|limitation in your own)/.test(t),
+    J: /(judg|conclusion|recommend|warrant|confidence|proportion|support|defend)/.test(t)
+  };
+}
+function scoreHTML(scores){
+  const labels={E:"Evidence",F:"Framing",O:"Own Position",J:"Warranted Judgement"};
+  return Object.entries(scores).map(([k,v])=>`<div class="score"><strong>${k} — ${labels[k]}</strong><div class="status">${v?"🟢":"🔴"}</div><div class="mini">${v?"Visible":"Missing / weak"}</div></div>`).join("");
+}
+function updateCloScores(){
+  el("cloScores").innerHTML=scoreHTML(efScore(el("ctcClo").value));
+}
+function updateAssessmentScores(){
+  const text=[el("taskBrief").value,el("assessmentOutput").value].join(" ");
+  const s=efScore(text);
+  el("assessmentScores").innerHTML=scoreHTML(s);
+  const all=Object.values(s).every(Boolean);
+  el("oneRule").innerHTML= all ? `<div class="notice green"><b>The One Rule:</b> NO — a student is unlikely to score highly without demonstrating CTC. CTC-assessable.</div>` :
+  `<div class="notice red"><b>The One Rule:</b> YES / POSSIBLY — a knowledgeable student may still score highly without using all required CTC reasoning. Redesign required.</div>`;
+}
+
+function suggestClo(){
+  const topic=el("topic").value||"the selected course topic";
+  const issue=el("issue").value||"the sustainability issue";
+  el("ctcClo").value=`Evaluate the evidence supporting a claim related to ${topic} and ${issue} by examining the source, method and limitations of evidence, identifying assumptions in the framing, addressing the weakest point in one's own position, and reaching a warranted judgement.`;
+  updateCloScores(); saveState();
+}
+function suggestActivities(){
+  const c=clusters[selectedCluster];
+  el("activity1").value=c.activity1;
+  el("activity1Output").value="Evidence Appraisal Sheet / annotated reasoning note";
+  el("feedback1").value="Peer review against evidence-source-method-limit criteria";
+  el("activity2").value=c.activity2;
+  el("activity2Output").value="Revised Judgement Memo / short oral defence";
+  el("feedback2").value="Lecturer or peer challenge focused on framing, own-position weakness and judgement";
+  saveState();
+}
+function suggestAssessment(){
+  const c=clusters[selectedCluster];
+  const issue=el("issue").value||c.sample_issue;
+  el("assessmentMethod").value=c.assessment_method.split(" / ")[0] || assessmentMethods[0];
+  el("assessmentOutput").value=c.assessment_output;
+  el("taskBrief").value=`Situation: ${issue}
+
+Your task: Produce a discipline-appropriate CTC assessment output for a named audience.
+
+You must:
+1. Evaluate the source, method and limitations of the evidence.
+2. Identify at least one important assumption in the framing and explain what it changes or hides.
+3. Identify and respond to the weakest point in your own position.
+4. Reach a warranted judgement whose strength is proportionate to the evidence and its limitations.
+
+Assessment output: ${c.assessment_output}`;
+  updateAssessmentScores(); saveState();
+}
+
+function renderRubric(){
+  const wrap=el("rubricWrap");
+  wrap.innerHTML=`<table class="rubric"><thead><tr><th>Criterion</th><th>1 — Limited</th><th>2 — Developing</th><th>3 — Proficient</th><th>4 — Exemplary</th></tr></thead>
+  <tbody>${rubricBase.map((r,i)=>`<tr>${r.map((x,j)=>`<td contenteditable="${j>0?"true":"false"}" data-r="${i}" data-c="${j}">${esc(x)}</td>`).join("")}</tr>`).join("")}</tbody></table>`;
+}
+function adaptRubric(){
+  const c=clusters[selectedCluster];
+  renderRubric();
+  const tbl=el("rubricWrap").querySelector("table");
+  const focus=c.focus.toLowerCase();
+  const e3=`Evaluates discipline-relevant evidence using ${c.focus} and identifies important limitations.`;
+  const f3=`Identifies an assumption in the way the issue is framed within ${c.name} and explains its consequence.`;
+  const o3=`States the weakest point in the student's own interpretation or recommendation and responds to it.`;
+  const j3=`Reaches a judgement proportionate to the evidence and communicates appropriate confidence.`;
+  [e3,f3,o3,j3].forEach((txt,i)=>tbl.rows[i+1].cells[3].textContent=txt);
+}
+
+function renderAlignment(){
+  const c=clusters[selectedCluster], s=sdgs[selectedSDG];
+  const items=[
+    ["Course",el("course").value||"—"],
+    ["Topic",el("topic").value||"—"],
+    ["Cluster",c.name],
+    ["Primary SDG",`SDG ${s.n} — ${s.name}`],
+    ["Authentic issue",el("issue").value||"—"],
+    ["CTC outcome",el("ctcClo").value||"—"],
+    ["Practice 1",el("activity1").value||"—"],
+    ["Feedback 1",el("feedback1").value||"—"],
+    ["Practice 2",el("activity2").value||"—"],
+    ["Feedback 2",el("feedback2").value||"—"],
+    ["Assessment method",el("assessmentMethod").value||"—"],
+    ["Assessment output",el("assessmentOutput").value||"—"]
+  ];
+  el("alignmentSummary").innerHTML=`<table class="rubric"><tbody>${items.map(x=>`<tr><td style="width:210px">${esc(x[0])}</td><td>${esc(x[1])}</td></tr>`).join("")}</tbody></table>`;
+  const q=[
+    ["Evidence is explicitly required in the task", efScore(el("taskBrief").value).E],
+    ["Framing/assumption analysis is explicitly required", efScore(el("taskBrief").value).F],
+    ["Students must challenge their own position", efScore(el("taskBrief").value).O],
+    ["Final judgement must be proportionate to evidence", efScore(el("taskBrief").value).J],
+    ["Practice 1 is defined", !!el("activity1").value.trim()],
+    ["Feedback 1 is defined", !!el("feedback1").value.trim()],
+    ["Practice 2 is defined", !!el("activity2").value.trim()],
+    ["Feedback 2 is defined", !!el("feedback2").value.trim()],
+    ["Assessment output is visible and markable", !!el("assessmentOutput").value.trim()]
+  ];
+  el("qualityChecklist").innerHTML=q.map(([t,v],i)=>`<label><input type="checkbox" ${v?"checked":""} disabled> ${esc(t)}</label>`).join("");
+  const all=q.every(x=>x[1]);
+  el("qualityResult").innerHTML=all?`<div class="notice green"><b>PASS — CTC-assessable.</b> The complete design makes the competency visible across practice, feedback, assessment and evidence.</div>`:`<div class="notice red"><b>REDESIGN REQUIRED.</b> One or more evidence links are missing. Return to the relevant stage before export.</div>`;
+}
+
+function renderFinalPack(){
+  const c=clusters[selectedCluster], s=sdgs[selectedSDG];
+  const vals = [
+    ["Course",`${el("course").value||"—"} ${el("code").value?"("+el("code").value+")":""}`],
+    ["Student level",el("level").value||"—"],["Existing topic",el("topic").value||"—"],
+    ["Cluster",c.name],["Primary SDG",`SDG ${s.n} — ${s.name}`],["Secondary SDG(s)",el("secondarySdgs").value||"—"],
+    ["Sustainability issue",el("issue").value||"—"],["Claim / question",el("claim").value||"—"],
+    ["CTC learning outcome",el("ctcClo").value||"—"],
+    ["Practice 1",el("activity1").value||"—"],["Practice 1 output",el("activity1Output").value||"—"],["Feedback 1",el("feedback1").value||"—"],
+    ["Practice 2",el("activity2").value||"—"],["Practice 2 output",el("activity2Output").value||"—"],["Feedback 2",el("feedback2").value||"—"],
+    ["Assessment method",el("assessmentMethod").value||"—"],["Assessment output",el("assessmentOutput").value||"—"],
+    ["Student task brief",el("taskBrief").value||"—"]
+  ];
+  el("finalPack").innerHTML=`<table class="rubric"><tbody>${vals.map(x=>`<tr><td style="width:220px">${esc(x[0])}</td><td style="white-space:pre-wrap">${esc(x[1])}</td></tr>`).join("")}</tbody></table>
+  <h4 style="margin-top:18px">Master CTC Rubric</h4>
+  <table class="rubric"><thead><tr><th>Criterion</th><th>Limited</th><th>Developing</th><th>Proficient</th><th>Exemplary</th></tr></thead><tbody>${rubricBase.map(r=>`<tr>${r.map(x=>`<td>${esc(x)}</td>`).join("")}</tr>`).join("")}</tbody></table>`;
+}
+
+function runClinic(){
+  const txt=el("clinicText").value;
+  const s=efScore(txt);
+  const missing=Object.entries(s).filter(x=>!x[1]).map(x=>x[0]);
+  let suggestions=[];
+  if(!s.E) suggestions.push("Add a clause requiring students to evaluate source, method and limitations of evidence.");
+  if(!s.F) suggestions.push("Add a clause requiring one important framing assumption and what it hides or changes.");
+  if(!s.O) suggestions.push("Require students to identify and respond to the weakest point in their own position.");
+  if(!s.J) suggestions.push("Require a conclusion proportionate to evidence and an explicit confidence level or qualification.");
+  el("clinicResult").innerHTML=`<div class="scoregrid">${scoreHTML(s)}</div>
+    <div class="${missing.length?"notice red":"notice green"}"><b>${missing.length?"Redesign recommended":"CTC-assessable"}</b><br>${missing.length?suggestions.map(x=>"• "+esc(x)).join("<br>"):"All four core CTC dimensions are visible in the task."}</div>`;
+}
+
+function gatherState(){
+  const ids=["course","code","level","topic","existingClo","existingAssessment","issue","claim","secondarySdgs","ctcClo","activity1","activity1Output","feedback1","activity2","activity2Output","feedback2","assessmentMethod","assessmentOutput","taskBrief"];
+  const obj={currentStage,selectedCluster,selectedSDG,values:{}};
+  ids.forEach(id=>obj.values[id]=el(id)?.value||"");
+  return obj;
+}
+function saveState(){
+  localStorage.setItem("ctcStudioV1",JSON.stringify(gatherState()));
+}
+function loadState(){
+  try{
+    const s=JSON.parse(localStorage.getItem("ctcStudioV1")||"null"); if(!s)return;
+    currentStage=s.currentStage||1; selectedCluster=s.selectedCluster||0; selectedSDG=s.selectedSDG||0;
+    Object.entries(s.values||{}).forEach(([id,v])=>{if(el(id))el(id).value=v;});
+  }catch(e){}
+}
+function resetStudio(){
+  if(!confirm("Reset all CTC Studio data stored in this browser?"))return;
+  localStorage.removeItem("ctcStudioV1"); location.reload();
+}
+function exportJSON(){
+  const blob=new Blob([JSON.stringify(gatherState(),null,2)],{type:"application/json"});
+  const a=document.createElement("a"); a.href=URL.createObjectURL(blob); a.download="CTC_Course_Integration_Pack.json"; a.click(); URL.revokeObjectURL(a.href);
+}
+
+["ctcClo","taskBrief","assessmentOutput"].forEach(id=>document.addEventListener("input",e=>{
+  if(e.target.id==="ctcClo")updateCloScores();
+  if(["taskBrief","assessmentOutput"].includes(e.target.id))updateAssessmentScores();
+  saveState();
+}));
+document.addEventListener("input",e=>{if(e.target.matches("input,textarea,select"))saveState();});
+
+buildNav(); renderClusters(); renderSDGs(); buildMethodSelect(); buildSimSelect(); buildLibraryTabs(); loadState(); renderClusters(); renderSDGs();
+if(!el("ctcClo").value)suggestClo();
+if(!el("activity1").value)suggestActivities();
+if(!el("taskBrief").value)suggestAssessment();
+goStage(currentStage);
+</script>
+</body>
+</html>

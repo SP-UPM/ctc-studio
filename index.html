@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>UPM CTC Studio V2 — 14 Clusters</title>
+<title>UPM CTC Studio V3 — Learn + Design</title>
 <style>
 :root {
   --green:#164E3A; --green2:#2E6B56; --gold:#C79A3B; --cream:#FBF8F1;
@@ -69,6 +69,34 @@ hr{border:0;border-top:1px solid var(--line);margin:18px 0}
 @media(max-width:1000px){.app{grid-template-columns:1fr}.sidebar{position:relative;height:auto}.navlist{display:grid;grid-template-columns:repeat(2,1fr)}.main{padding:20px}.sdg-grid{grid-template-columns:repeat(2,1fr)}.choice-grid,.grid3{grid-template-columns:1fr 1fr}}
 @media(max-width:650px){.grid2,.grid3,.choice-grid,.sdg-grid,.scoregrid{grid-template-columns:1fr}.topbar{flex-direction:column}}
 @media print{.sidebar,.topbar .progress-wrap,.btnrow,.tabs,.btn,.no-print{display:none!important}.app{display:block}.main{padding:0;max-width:none}.stage{display:none!important}#stage8{display:block!important}body{background:white}.card{box-shadow:none;break-inside:avoid}}
+
+.home-hero{background:linear-gradient(135deg,#164E3A,#2E6B56);color:white;border-radius:20px;padding:30px;margin-bottom:18px}
+.home-hero h2{font-size:34px;margin:0 0 8px;color:white}.home-hero p{font-size:16px;color:#e7f2ed;max-width:850px}
+.entry-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-top:18px}
+.entry{background:white;color:#202526;border:1px solid #dbe2de;border-radius:14px;padding:18px;text-align:left}
+.entry:hover{transform:translateY(-1px);box-shadow:0 8px 22px rgba(0,0,0,.08)}.entry b{display:block;color:#164E3A;font-size:16px;margin-bottom:5px}
+.learn-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.learn-card{border-radius:14px;padding:16px;color:white;min-height:145px}.learn-card h4{color:white;margin:0 0 8px}.learn-card p{font-size:13px;margin:0}
+.learn-e{background:#2b7a5b}.learn-f{background:#3d6f93}.learn-o{background:#b58b36}.learn-j{background:#8f3f3b}
+.definition{font-size:18px;line-height:1.55;background:#f7faf8;border:1px solid #d9e4de;border-left:6px solid #164E3A;border-radius:12px;padding:16px}
+.quiz-item{border:1px solid #d9e0dc;border-radius:12px;padding:15px;margin:10px 0;background:white}
+.quiz-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.quiz-actions button{border:1px solid #cfd8d3;background:white;border-radius:9px;padding:8px 11px;font-weight:700}
+.quiz-feedback{margin-top:10px;padding:10px;border-radius:9px;background:#f3f5f4;display:none}
+.how-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.step-card{border:1px solid #d9e0dc;border-radius:13px;padding:15px;background:white}.step-card .stepn{font-weight:900;color:#C79A3B;font-size:12px}.step-card h4{margin:4px 0 6px;color:#164E3A}
+.quicklinks{display:flex;gap:8px;flex-wrap:wrap}.quicklinks button{border:0;border-radius:9px;padding:9px 12px;font-weight:800;background:#edf3ef;color:#164E3A}
+.sidebar-primary{margin-bottom:12px;padding-bottom:14px;border-bottom:1px solid rgba(255,255,255,.18)}
+.sidebar-primary button{width:100%;text-align:left;background:transparent;border:0;color:#fff;padding:10px 11px;border-radius:9px;margin:2px 0;font-weight:750}
+.sidebar-primary button:hover,.sidebar-primary button.active{background:white;color:#164E3A}
+.guide-table{width:100%;border-collapse:collapse}.guide-table th,.guide-table td{border:1px solid #d7dfdb;padding:9px;vertical-align:top}.guide-table th{background:#164E3A;color:white}
+.compare-table{width:100%;border-collapse:collapse}.compare-table th,.compare-table td{border:1px solid #d7dfdb;padding:9px;vertical-align:top}.compare-table th{background:#2E6B56;color:white}
+.tour-mask{position:fixed;inset:0;background:rgba(18,28,24,.58);z-index:9998;display:none}
+.tour-card{position:fixed;z-index:9999;right:28px;bottom:28px;width:min(430px,calc(100vw - 40px));background:white;border-radius:16px;padding:18px;box-shadow:0 18px 60px rgba(0,0,0,.32);display:none}
+.tour-card h3{margin:0 0 7px;color:#164E3A}.tour-card p{margin:0 0 13px}.tour-nav{display:flex;justify-content:space-between;gap:8px}
+.source-note{font-size:12px;color:#66716f;border-top:1px solid #d9e0dc;margin-top:14px;padding-top:10px}
+@media(max-width:1000px){.entry-grid{grid-template-columns:1fr}.learn-grid{grid-template-columns:repeat(2,1fr)}.how-grid{grid-template-columns:1fr}}
+@media(max-width:650px){.learn-grid{grid-template-columns:1fr}}
+
 </style>
 </head>
 <body>
@@ -81,6 +109,12 @@ hr{border:0;border-top:1px solid var(--line);margin:18px 0}
     <div class="ef-bar">
       <div class="ef e">E<br>Evidence</div><div class="ef f">F<br>Framing</div><div class="ef o">O<br>Own</div><div class="ef j">J<br>Judgement</div>
     </div>
+    <div class="sidebar-primary">
+      <button id="homeBtn" onclick="showStandalone('home')">🏠 &nbsp;Home</button>
+      <button id="learnBtn" onclick="showStandalone('learn')">📘 &nbsp;Learn CTC</button>
+      <button id="howBtn" onclick="showStandalone('howto')">❓ &nbsp;How to Use CTC Studio</button>
+    </div>
+    <div class="mini" style="color:#cfe0d8;margin:4px 9px 7px;font-weight:800;letter-spacing:.05em">DESIGN MY COURSE</div>
     <div class="navlist" id="navlist"></div>
     <div class="side-actions">
       <button onclick="showTool('clinic')">Assessment Clinic</button>
@@ -96,7 +130,210 @@ hr{border:0;border-top:1px solid var(--line);margin:18px 0}
       <div class="progress-wrap"><div class="mini">Studio progress</div><div class="progress"><div id="progressFill"></div></div><div class="mini" id="progressText">1 of 8</div></div>
     </div>
 
-    <section class="stage active" id="stage1">
+
+    <section class="stage active" id="view-home">
+      <div class="home-hero">
+        <div class="mini" style="color:#f2dca4;font-weight:900;letter-spacing:.08em">UPM CTC STUDIO V3</div>
+        <h2>Design learning that makes critical thinking visible.</h2>
+        <p>Learn Critical Thinking Competency, experience E-F-O-J, then redesign an existing course through 14 discipline clusters and all 17 Sustainable Development Goals.</p>
+        <div class="entry-grid">
+          <button class="entry" onclick="showStandalone('learn')"><b>📘 I’m new to CTC</b>Learn the competency, try examples and complete a readiness check.</button>
+          <button class="entry" onclick="goStage(1)"><b>🛠 I’m ready to design</b>Build CTC into an existing course from Course Setup to Export.</button>
+          <button class="entry" onclick="showTool('clinic')"><b>🔎 I already have an assignment</b>Use Assessment Clinic to diagnose what CTC evidence is missing.</button>
+        </div>
+      </div>
+      <div class="card">
+        <h3>What CTC Studio does</h3>
+        <div class="grid3">
+          <div><b>Learn</b><p class="mini">Understand CTC, E-F-O-J, common misconceptions and neighbouring ESD competencies.</p></div>
+          <div><b>Design</b><p class="mini">Contextualise CTC through 14 discipline clusters and all 17 SDGs.</p></div>
+          <div><b>Assess</b><p class="mini">Create activities, assessment evidence, rubric and an alignment-checked Course Integration Pack.</p></div>
+        </div>
+        <div class="quicklinks">
+          <button onclick="startTour()">▶ 3-minute Studio Tour</button>
+          <button onclick="showTool('sim')">🧪 Try a Simulation</button>
+          <button onclick="showTool('library')">📚 Explore 14 Clusters</button>
+        </div>
+      </div>
+      <div class="notice green"><b>Core design rule:</b> The SDG provides the context, the discipline provides the knowledge and evidence, and CTC provides the way students interrogate that knowledge and evidence.</div>
+    </section>
+
+    <section class="stage" id="view-learn">
+      <div class="card">
+        <h3>Learn Critical Thinking Competency (CTC)</h3>
+        <p class="definition"><b>CTC means questioning claims, evidence, assumptions and framings — including your own.</b> Students separate evidence from assertion, examine how a claim was measured, question the framing itself, and reach a judgement appropriate to what the evidence can support.</p>
+        <div class="notice"><b>The critical shift:</b> from evaluating the answer to interrogating the question.</div>
+        <div class="source-note">Source basis: UPM ESD Guidebook and the CTC SIM used for this Studio.</div>
+      </div>
+
+      <div class="card">
+        <h3>The E-F-O-J Design Language</h3>
+        <div class="learn-grid">
+          <div class="learn-card learn-e"><h4>E — Evidence</h4><p><b>Can the evidence support the claim?</b><br><br>Evaluate the source, method and limits of evidence.</p></div>
+          <div class="learn-card learn-f"><h4>F — Framing & Assumptions</h4><p><b>What is being taken for granted?</b><br><br>Identify an assumption and what the framing makes less visible.</p></div>
+          <div class="learn-card learn-o"><h4>O — Own Position</h4><p><b>What is the weakest point in my conclusion?</b><br><br>Turn critical scrutiny onto your own position.</p></div>
+          <div class="learn-card learn-j"><h4>J — Warranted Judgement</h4><p><b>What can I reasonably conclude?</b><br><br>Reach a conclusion proportionate to the quality and limits of evidence.</p></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>One claim, four CTC questions</h3>
+        <div class="notice green"><b>Claim:</b> “Online learning is more environmentally sustainable than face-to-face learning.”</div>
+        <table class="compare-table">
+          <tr><th>Dimension</th><th>CTC question</th></tr>
+          <tr><td><b>E — Evidence</b></td><td>How was environmental impact measured? Were devices, data-centre energy and transport included?</td></tr>
+          <tr><td><b>F — Framing</b></td><td>Is sustainability being defined only through carbon emissions? What impacts become less visible?</td></tr>
+          <tr><td><b>O — Own Position</b></td><td>If I conclude that online learning has lower emissions, what is the weakest part of that conclusion?</td></tr>
+          <tr><td><b>J — Judgement</b></td><td>Does the evidence justify “always”, “usually”, or only “under specified conditions”?</td></tr>
+        </table>
+      </div>
+
+      <div class="card">
+        <h3>What CTC is NOT</h3>
+        <div class="grid2">
+          <div class="notice red"><b>Recall ≠ CTC</b><br>Reproducing information does not show that the evidence was interrogated.</div>
+          <div class="notice red"><b>Opinion ≠ CTC</b><br>“I agree” or “I disagree” may remain unsupported.</div>
+          <div class="notice red"><b>Scepticism ≠ CTC</b><br>Rejecting everything is not critical reasoning; scrutiny must also turn onto one’s own position.</div>
+          <div class="notice red"><b>“Critically discuss” ≠ automatically CTC</b><br>The task must specify the reasoning students must perform.</div>
+        </div>
+        <div class="notice"><b>Important:</b> We assess the quality and proportionality of reasoning, not whether students agree with the lecturer.</div>
+      </div>
+
+      <div class="card">
+        <h3>CTC or Not Yet CTC?</h3>
+        <div class="quiz-item" data-answer="no">
+          <b>1. “List three advantages of solar energy.”</b>
+          <div class="quiz-actions"><button onclick="answerMiniQuiz(this,false)">CTC</button><button onclick="answerMiniQuiz(this,true)">Not yet CTC</button></div>
+          <div class="quiz-feedback">Correct: this mainly measures recall or description.</div>
+        </div>
+        <div class="quiz-item" data-answer="no">
+          <b>2. “Do you support solar farms?”</b>
+          <div class="quiz-actions"><button onclick="answerMiniQuiz(this,false)">CTC</button><button onclick="answerMiniQuiz(this,true)">Not necessarily CTC</button></div>
+          <div class="quiz-feedback">Correct: a personal preference alone is not evidence of CTC.</div>
+        </div>
+        <div class="quiz-item" data-answer="yes">
+          <b>3. “Evaluate the evidence supporting the claim that solar farms are environmentally sustainable. Identify one assumption in the comparison and the weakest point in your conclusion.”</b>
+          <div class="quiz-actions"><button onclick="answerMiniQuiz(this,true)">CTC</button><button onclick="answerMiniQuiz(this,false)">Not CTC</button></div>
+          <div class="quiz-feedback">Correct: the task makes Evidence, Framing, Own Position and Warranted Judgement visible.</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>CTC versus neighbouring ESD competencies</h3>
+        <table class="compare-table">
+          <tr><th>Competency</th><th>Main question</th></tr>
+          <tr><td><b>Critical Thinking</b></td><td>Is this claim, evidence or framing supportable?</td></tr>
+          <tr><td>Systems Thinking</td><td>How do the parts interact across the system?</td></tr>
+          <tr><td>Normative</td><td>What is desirable, fair or ethically appropriate, and for whom?</td></tr>
+          <tr><td>Anticipatory</td><td>What futures may emerge?</td></tr>
+          <tr><td>Strategic</td><td>How can change be achieved?</td></tr>
+          <tr><td>Collaboration</td><td>How do we integrate people and perspectives across difference?</td></tr>
+          <tr><td>Self-awareness</td><td>How do my role, values and actions affect the situation?</td></tr>
+          <tr><td>Integrated Problem-solving</td><td>Which competencies should be combined to produce a workable response?</td></tr>
+        </table>
+        <div class="notice"><b>Critical vs Normative:</b> Critical asks whether a claim is supportable. Normative asks whether acting on it is right, and for whom.</div>
+      </div>
+
+      <div class="card">
+        <h3>Mini CTC Simulation</h3>
+        <div class="notice green"><b>Claim:</b> “Electric vehicles are environmentally sustainable because they have zero tailpipe emissions.”</div>
+        <div class="grid3">
+          <div class="library-item"><h4>Source A</h4><p><b>Manufacturer advertisement:</b> “Zero emissions while driving.”</p></div>
+          <div class="library-item"><h4>Source B</h4><p><b>Lifecycle summary:</b> manufacturing emissions are higher than for a conventional vehicle.</p></div>
+          <div class="library-item"><h4>Source C</h4><p><b>Electricity-mix data:</b> charging emissions vary substantially by electricity source.</p></div>
+        </div>
+        <details><summary><b>Try E-F-O-J before opening the indicative reasoning</b></summary>
+          <p><b>E:</b> Source A supports only the absence of tailpipe emissions; it does not establish whole-lifecycle sustainability. Sources B and C broaden the evidence base.</p>
+          <p><b>F:</b> The phrase “zero emissions” frames the problem around tailpipe emissions and makes manufacturing and electricity generation less visible.</p>
+          <p><b>O:</b> A pro-EV conclusion may still be weak if it assumes a low-carbon electricity mix or ignores manufacturing impacts.</p>
+          <p><b>J:</b> A proportionate conclusion is that EVs can reduce some emissions under specified lifecycle and electricity conditions, not that they are universally “zero-emission” vehicles.</p>
+        </details>
+      </div>
+
+      <div class="card">
+        <h3>CTC Readiness Check</h3>
+        <p>Tick each statement you can now explain confidently.</p>
+        <div class="checklist" id="readinessChecklist">
+          <label><input type="checkbox" onchange="updateReadiness()"> I can explain why recall and opinion are not enough to demonstrate CTC.</label>
+          <label><input type="checkbox" onchange="updateReadiness()"> I can distinguish Evidence from Framing & Assumptions.</label>
+          <label><input type="checkbox" onchange="updateReadiness()"> I understand why students must examine the weakest point in their own position.</label>
+          <label><input type="checkbox" onchange="updateReadiness()"> I can recognise a judgement that is proportionate to limited evidence.</label>
+          <label><input type="checkbox" onchange="updateReadiness()"> I can explain the difference between Critical Thinking and Normative Competency.</label>
+        </div>
+        <div id="readinessResult" class="notice">Complete the five statements. You can review any section at any time.</div>
+        <button class="btn primary" onclick="goStage(1)">Ready to Design →</button>
+      </div>
+    </section>
+
+    <section class="stage" id="view-howto">
+      <div class="card">
+        <h3>How to Use CTC Studio</h3>
+        <p>CTC Studio is both a <b>learning environment</b> and a <b>course-design tool</b>. You may start by learning CTC, build a course from Stage 01, or diagnose an assessment you already have.</p>
+        <div class="quicklinks">
+          <button onclick="startTour()">▶ Take the Studio Tour</button>
+          <button onclick="showStandalone('learn')">📘 Learn CTC</button>
+          <button onclick="goStage(1)">🛠 Start Designing</button>
+          <button onclick="showTool('clinic')">🔎 Improve Existing Assessment</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Three ways to begin</h3>
+        <div class="entry-grid">
+          <div class="entry"><b>New to CTC</b>Go to <b>Learn CTC</b>: definition → E-F-O-J → misconceptions → mini simulation → readiness check.</div>
+          <div class="entry"><b>Have a course to develop</b>Go through Stage 01–08 to produce a complete CTC Course Integration Pack.</div>
+          <div class="entry"><b>Already have an assignment</b>Paste it into Assessment Clinic, diagnose missing CTC evidence, then continue into the design stages.</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>The 8-stage design journey</h3>
+        <table class="guide-table">
+          <tr><th>Stage</th><th>What you do</th><th>What Studio produces</th></tr>
+          <tr><td><b>01 Course Setup</b></td><td>Enter an existing course, topic, CLO and assessment.</td><td>Course profile</td></tr>
+          <tr><td><b>02 Cluster, SDG & Context</b></td><td>Select 1 of 14 clusters, one Primary SDG and an authentic sustainability issue.</td><td>CTC context</td></tr>
+          <tr><td><b>03 CTC Learning Outcome</b></td><td>Turn the existing outcome into observable critical reasoning.</td><td>CTC learning outcome</td></tr>
+          <tr><td><b>04 Learning Activities</b></td><td>Design Practice 1 → Feedback → Practice 2 → Feedback.</td><td>CTC learning sequence</td></tr>
+          <tr><td><b>05 Assessment</b></td><td>Select assessment method and define the actual student output.</td><td>Assessment brief + diagnostic</td></tr>
+          <tr><td><b>06 Rubric</b></td><td>Build/adapt the four E-F-O-J criteria and four performance levels.</td><td>4 × 4 analytic rubric</td></tr>
+          <tr><td><b>07 Alignment</b></td><td>Check CLO → activities → feedback → assessment → rubric.</td><td>CTC quality report</td></tr>
+          <tr><td><b>08 Export</b></td><td>Compile the design and print or export.</td><td>CTC Course Integration Pack</td></tr>
+        </table>
+      </div>
+
+      <div class="card">
+        <h3>What each major tool is for</h3>
+        <div class="how-grid">
+          <div class="step-card"><div class="stepn">TOOL</div><h4>Assessment Clinic</h4><p>Paste an existing task. The clinic checks whether E, F, O and J are actually required and suggests what to add.</p></div>
+          <div class="step-card"><div class="stepn">TOOL</div><h4>Simulation Lab</h4><p>Experience CTC as a learner through a discipline-specific scenario before adapting it to your course.</p></div>
+          <div class="step-card"><div class="stepn">TOOL</div><h4>14-Cluster Library</h4><p>See sample disciplinary lenses, learning activities, pedagogy, assessment methods and outputs.</p></div>
+          <div class="step-card"><div class="stepn">QUALITY GATE</div><h4>The One Rule</h4><p>Ask: <b>Could a knowledgeable student score highly without demonstrating CTC?</b> If yes, redesign the task.</p></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Assessment Method vs Assessment Output</h3>
+        <table class="compare-table">
+          <tr><th>Assessment Method</th><th>Assessment Output</th></tr>
+          <tr><td>Oral Defence</td><td>5-minute individual defence + examiner challenge response</td></tr>
+          <tr><td>Case Analysis</td><td>1,000-word evidence-based recommendation memo</td></tr>
+          <tr><td>Technical Brief</td><td>2-page technical evidence brief for a named audience</td></tr>
+          <tr><td>Laboratory Critique</td><td>Annotated results + interpretation of method, limits and inference</td></tr>
+        </table>
+      </div>
+
+      <div class="card">
+        <h3>Common mistakes to avoid</h3>
+        <div class="grid2">
+          <div class="notice red"><b>Starting from the SDG list</b><br>Start from existing disciplinary content, then identify the authentic sustainability issue and Primary SDG.</div>
+          <div class="notice red"><b>Using “critically” as the only CTC instruction</b><br>Specify what students must do with evidence, framing, their own position and judgement.</div>
+          <div class="notice red"><b>Discussion with no visible output</b><br>Create an individual written, oral, annotated or process output that can be assessed.</div>
+          <div class="notice red"><b>Writing the rubric before the task</b><br>Define the assessment evidence first; then create the rubric to judge that evidence.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="stage" id="stage1">
       <div class="card">
         <h3>Course Setup</h3>
         <div class="grid2">
@@ -277,6 +514,64 @@ let selectedCluster = 0;
 let selectedSDG = 8; // SDG 9 default index
 let libraryCluster = 0;
 
+
+let currentStandalone = "home";
+const tourSteps = [
+  ["Welcome","CTC Studio combines learning and course design. Use Home to choose how you want to begin."],
+  ["Learn CTC","New to the competency? Learn E-F-O-J, distinguish CTC from recall/opinion/scepticism, try a mini simulation and complete the readiness check."],
+  ["Design stages","Stages 01–08 take you from an existing course to a complete CTC Course Integration Pack."],
+  ["14 discipline clusters","Choose the cluster closest to your course. The disciplinary lens, examples and assessment suggestions adapt to the selected cluster."],
+  ["All 17 SDGs","Choose one Primary SDG that genuinely aligns with the course content. Secondary SDGs are optional context."],
+  ["Assessment Clinic","Already have an assignment? Diagnose whether Evidence, Framing, Own Position and Warranted Judgement are actually required."],
+  ["Simulation Lab","Experience CTC as a learner through a discipline-specific scenario before adapting it."],
+  ["Quality Gate & Export","The Studio checks the evidence chain. If the design passes, export or print the complete CTC Course Integration Pack."]
+];
+let tourIndex = 0;
+
+function setTopbar(title,sub,showProgress=false){
+  el("stageTitle").textContent=title;
+  el("stageSub").textContent=sub;
+  el("progressFill").parentElement.parentElement.style.display=showProgress?"block":"none";
+}
+function clearPrimaryActive(){
+  ["homeBtn","learnBtn","howBtn"].forEach(id=>el(id)?.classList.remove("active"));
+}
+function showStandalone(view){
+  currentStandalone=view;
+  document.querySelectorAll(".stage").forEach(s=>s.classList.remove("active"));
+  el("view-"+view).classList.add("active");
+  document.querySelectorAll(".navbtn").forEach(b=>b.classList.remove("active"));
+  clearPrimaryActive();
+  const meta={
+    home:["CTC Studio V3","Learn • Experience • Design • Practise • Assess • Rubric • Check • Export"],
+    learn:["Learn CTC","Understand Critical Thinking Competency before designing it."],
+    howto:["How to Use CTC Studio","Choose a pathway and follow the Studio from learning to export."]
+  };
+  setTopbar(meta[view][0],meta[view][1],false);
+  const btn={home:"homeBtn",learn:"learnBtn",howto:"howBtn"}[view]; if(el(btn))el(btn).classList.add("active");
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+function answerMiniQuiz(btn,correct){
+  const item=btn.closest(".quiz-item"), fb=item.querySelector(".quiz-feedback");
+  fb.style.display="block";
+  fb.style.background=correct?"#EAF2EE":"#F8E8E6";
+  fb.innerHTML=(correct?"✓ ":"Try again: ")+fb.textContent.replace(/^✓ |^Try again: /,"");
+}
+function updateReadiness(){
+  const checks=[...document.querySelectorAll("#readinessChecklist input")];
+  const n=checks.filter(x=>x.checked).length;
+  el("readinessResult").className="notice "+(n===5?"green":"");
+  el("readinessResult").innerHTML=n===5?`<b>Ready to design.</b> You have checked all five readiness statements. Continue to Stage 01 when ready.`:`<b>${n}/5 checked.</b> Review the learning sections above and continue when you are comfortable.`;
+}
+function startTour(){tourIndex=0;el("tourMask").style.display="block";el("tourCard").style.display="block";renderTour();}
+function renderTour(){
+  const s=tourSteps[tourIndex]; el("tourCount").textContent=`${tourIndex+1} of ${tourSteps.length}`;
+  el("tourTitle").textContent=s[0]; el("tourText").textContent=s[1];
+}
+function tourNext(){if(tourIndex<tourSteps.length-1){tourIndex++;renderTour();}else{closeTour();goStage(1);}}
+function tourPrev(){if(tourIndex>0){tourIndex--;renderTour();}}
+function closeTour(){el("tourMask").style.display="none";el("tourCard").style.display="none";}
+
 const rubricBase = [
   ["Evidence","Repeats claims as given.","Questions a claim but not its method.","Evaluates source, method and limits of evidence.","Evaluates source, method and limits and states what the evidence cannot establish."],
   ["Framing & Assumptions","Accepts the question or claim as framed.","Recognises framing or assumptions but does not probe consequences.","Identifies an assumption embedded in the framing.","Identifies the assumption and explains what the framing makes invisible."],
@@ -350,9 +645,9 @@ function goStage(n){
   currentStage=n;
   document.querySelectorAll(".stage").forEach(s=>s.classList.remove("active"));
   el("stage"+n).classList.add("active");
+  clearPrimaryActive();
   document.querySelectorAll(".navbtn").forEach(b=>b.classList.toggle("active",+b.dataset.stage===n));
-  el("stageTitle").textContent=`Stage ${String(n).padStart(2,"0")} — ${stageMeta[n-1][0]}`;
-  el("stageSub").textContent=stageMeta[n-1][1];
+  setTopbar(`Stage ${String(n).padStart(2,"0")} — ${stageMeta[n-1][0]}`,stageMeta[n-1][1],true);
   el("progressFill").style.width=(n/8*100)+"%"; el("progressText").textContent=`${n} of 8`;
   if(n===3) updateCloScores();
   if(n===5) updateAssessmentScores();
@@ -366,6 +661,9 @@ function showTool(tool){
   document.querySelectorAll(".stage").forEach(s=>s.classList.remove("active"));
   el("tool-"+tool).classList.add("active");
   document.querySelectorAll(".navbtn").forEach(b=>b.classList.remove("active"));
+  clearPrimaryActive();
+  const meta={clinic:["Assessment Clinic","Diagnose and improve an existing assignment."],sim:["Simulation Lab","Experience CTC through a discipline-specific scenario."],library:["14-Cluster Library","Explore discipline-specific examples and adapt them to your course."]};
+  setTopbar(meta[tool][0],meta[tool][1],false);
   if(tool==="sim") renderSimulation(+el("simCluster").value);
 }
 
@@ -517,18 +815,20 @@ function gatherState(){
   return obj;
 }
 function saveState(){
-  localStorage.setItem("ctcStudioV2",JSON.stringify(gatherState()));
+  localStorage.setItem("ctcStudioV3",JSON.stringify(gatherState()));
 }
 function loadState(){
   try{
-    const s=JSON.parse(localStorage.getItem("ctcStudioV2")||"null"); if(!s)return;
+    let raw=localStorage.getItem("ctcStudioV3");
+    if(!raw) raw=localStorage.getItem("ctcStudioV2");
+    const s=JSON.parse(raw||"null"); if(!s)return;
     currentStage=s.currentStage||1; selectedCluster=s.selectedCluster||0; selectedSDG=s.selectedSDG||0;
     Object.entries(s.values||{}).forEach(([id,v])=>{if(el(id))el(id).value=v;});
   }catch(e){}
 }
 function resetStudio(){
   if(!confirm("Reset all CTC Studio data stored in this browser?"))return;
-  localStorage.removeItem("ctcStudioV2"); location.reload();
+  localStorage.removeItem("ctcStudioV3"); localStorage.removeItem("ctcStudioV2"); location.reload();
 }
 function exportJSON(){
   const blob=new Blob([JSON.stringify(gatherState(),null,2)],{type:"application/json"});
@@ -546,7 +846,19 @@ buildNav(); renderClusters(); renderSDGs(); buildMethodSelect(); buildSimSelect(
 if(!el("ctcClo").value)suggestClo();
 if(!el("activity1").value)suggestActivities();
 if(!el("taskBrief").value)suggestAssessment();
-goStage(currentStage);
+showStandalone("home");
 </script>
+
+<div class="tour-mask" id="tourMask"></div>
+<div class="tour-card" id="tourCard">
+  <div class="mini" id="tourCount"></div>
+  <h3 id="tourTitle"></h3>
+  <p id="tourText"></p>
+  <div class="tour-nav">
+    <button class="btn secondary" onclick="closeTour()">Close</button>
+    <div><button class="btn secondary" onclick="tourPrev()">← Back</button> <button class="btn primary" onclick="tourNext()">Next →</button></div>
+  </div>
+</div>
+
 </body>
 </html>
